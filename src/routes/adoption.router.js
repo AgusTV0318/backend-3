@@ -1,13 +1,13 @@
 import { Router } from "express";
-import usersServices from "../services/users.services";
-import petsServices from "../services/pets.services";
+import usersServices from "../services/users.services.js";
+import petsServices from "../services/pets.services.js";
 
-const router = router();
+const router = Router();
 
 router.get("/", async (req, res) => {
   try {
     const users = await usersServices.getAll();
-    const adoptions = users.filters((u) => u.pets.length > 0);
+    const adoptions = users.filter((u) => u.pets.length > 0);
     res.json({ status: "success", payload: adoptions });
   } catch (error) {
     res.status(500).json({ status: "error", message: error.message });
@@ -37,9 +37,9 @@ router.post("/:uid/:pid", async (req, res) => {
     if (!user)
       return res
         .status(404)
-        .json({ status: "error", message: "Usuario no encontrada." });
+        .json({ status: "error", message: "Usuario no encontrado." });
 
-    const pet = await petsService.getById(req.params.pid);
+    const pet = await petsServices.getById(req.params.pid);
     if (!pet)
       return res
         .status(404)
@@ -48,7 +48,7 @@ router.post("/:uid/:pid", async (req, res) => {
     if (pet.adopted)
       return res
         .status(400)
-        .json({ status: "error", message: "La mascota ya fue adoptada" });
+        .json({ status: "error", message: "La mascota ya fue adoptada." });
 
     user.pets.push(pet._id);
     await user.save();
@@ -59,7 +59,7 @@ router.post("/:uid/:pid", async (req, res) => {
 
     res.json({
       status: "success",
-      message: `${user.first_name} adopto a ${pet.name} exitosamente.`,
+      message: `${user.first_name} adoptó a ${pet.name} exitosamente.`,
       payload: { user, pet },
     });
   } catch (error) {

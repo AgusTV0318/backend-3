@@ -14,6 +14,11 @@
   "main": "src/app.js",
   "scripts": {
     "start": "node src/app.js",
-    "dev": "node --watch src/app.js"
+    "dev": "node --watch src/app.js",
+    "test": "mocha src/test/adoption.test.js --exit"
+  },
+  "devDependencies": {
+    "chai": "^6.2.2",
+    "supertest": "^7.2.2"
   }
 }
